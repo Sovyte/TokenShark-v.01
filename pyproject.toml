@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tokenshark"
+version = "0.1.0"
+description = "Patch your LLM client with one import and see real-time token costs in your terminal."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+# DECISION GAP: license/author left as placeholders -- not covered by
+# ARCHITECTURE.md, this one's genuinely your call.
+authors = [
+    { name = "YOUR NAME HERE", email = "YOUR EMAIL HERE" },
+]
+keywords = ["llm", "openai", "anthropic", "cost-tracking", "observability", "cli"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+# rich/typer/requests are used by cli.py/dashboard.py/alerts.py, which
+# aren't part of this handoff batch -- included now anyway since
+# ARCHITECTURE.md's "Definition of Done for v0.1" requires all of those
+# files, so `pip install -e .` will already have what they need once you
+# write them. Nothing in *this* batch (proxy.py/tracker.py/config.py/
+# exceptions.py/__init__.py) imports rich or typer -- see the flag in
+# tracker.py about why the terminal output there is plain print(), not rich.
+dependencies = [
+    "pyyaml>=6.0",
+    "rich>=13.0",
+    "typer>=0.12",
+    "requests>=2.31",
+]
+
+# openai/anthropic are intentionally NOT hard dependencies. TokenShark is
+# designed to work with either, both, or neither installed (monitor()
+# skips a provider it can't import instead of crashing -- see __init__.py)
+# so forcing both as required deps would be unnecessary bloat for anyone
+# only using one provider. Not an explicit call in ARCHITECTURE.md --
+# flagging as a packaging decision made to match the graceful-degradation
+# behavior the architecture doc already specifies elsewhere.
+[project.optional-dependencies]
+openai = ["openai>=1.0"]
+anthropic = ["anthropic>=0.40"]
+estimate = ["tiktoken>=0.7"]
+all = ["openai>=1.0", "anthropic>=0.40", "tiktoken>=0.7"]
+
+[project.urls]
+Homepage = "https://github.com/YOUR_USERNAME/tokenshark"
+Repository = "https://github.com/YOUR_USERNAME/tokenshark"
+Issues = "https://github.com/YOUR_USERNAME/tokenshark/issues"
+# DECISION GAP: GitHub URLs are placeholders -- fill in once the repo exists.
+
+[project.scripts]
+tokenshark = "tokenshark.cli:app"
+# DECISION GAP: points at cli.py, which isn't part of this batch.
+# `pip install -e .` will succeed today regardless -- entry points are
+# only resolved when the `tokenshark` command actually runs, not at
+# install time -- but running it will fail with ModuleNotFoundError until
+# cli.py exists and defines a Typer `app` object.
+
+[tool.hatch.build.targets.wheel]
+packages = ["tokenshark"]
