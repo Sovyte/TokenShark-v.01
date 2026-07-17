@@ -1,0 +1,24 @@
+name: Send Old Commits to Discord
+on:
+  workflow_dispatch: # Allows you to manually trigger it
+
+jobs:
+  sync_history:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Post Commits to Discord
+        run: |
+          # Pulls the last 30 commits. Change 30 if you need more!
+          git log -n 30 --reverse --pretty=format:"%h - %an: %s" | while read -r line; do
+            curl -H "Content-Type: application/json" \
+                 -X POST \
+                 -d "{\"content\": \"**Repo Log:** $line\"}" \
+                 ${{ secrets.DISCORD_WEBHOOK_URL }}
+            sleep 1
+          done
+          
