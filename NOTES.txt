@@ -1,0 +1,24 @@
+TokenShark update -- quick reference
+=====================================
+
+This zip mirrors your repo layout (README.md at the root, the .py
+files inside tokenshark/). Unzip it directly into your repo root and
+everything lands in the right place -- see the chat message for the
+exact command.
+
+Still to do by hand, not included in this zip:
+
+1. pyproject.toml -- merge this in under [project.scripts]:
+
+     [project.scripts]
+     tokenshark = "tokenshark.cli:main"
+
+2. Bump the version in tokenshark/__init__.py (__version__) and
+   pyproject.toml (version) to whatever's next after what's already
+   live on PyPI -- PyPI rejects re-uploading an existing version
+   number.
+
+3. To turn on Slack budget alerts, set TOKENSHARK_SLACK_WEBHOOK to
+   your Slack incoming webhook URL (see README.md's "Budget alerts"
+   section). Nothing else needs to change -- alerts.py and tracker.py
+   already wire it in.

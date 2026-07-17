@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Database storage profiles
+*.db
+*.sqlite
+.tokenshark/
+
+# Operational environments
+.env
+venv/
+/tmp/ts_*
+dist/
+build/
+*.egg-info/

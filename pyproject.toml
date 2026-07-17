@@ -1,19 +1,19 @@
+[project.scripts]
+tokenshark = "tokenshark.cli:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "tokenshark"
-version = "0.1.0"
+name = "tokenshark-bin"
+version = "0.2.0"
 description = "Patch your LLM client with one import and see real-time token costs in your terminal."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 # DECISION GAP: license/author left as placeholders -- not covered by
 # ARCHITECTURE.md, this one's genuinely your call.
-authors = [
-    { name = "YOUR NAME HERE", email = "YOUR EMAIL HERE" },
-]
+authors = [{ name = "tokenshark-bin" }]
 keywords = ["llm", "openai", "anthropic", "cost-tracking", "observability", "cli"]
 classifiers = [
     "Development Status :: 3 - Alpha",
